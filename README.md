@@ -1,73 +1,216 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# REGISTR APP (API)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+_Esta API esta construida en [NestJS](https://nestjs.com/) la cual permite registar usuarios y asistencia de clases atravez de un codigo QR._
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Comenzando 🚀
 
-## Description
+_Siguiendo estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo, pruebas o evaluacion del proyecto._
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+### Pre-requisitos 📋
 
-```bash
-$ npm install
+* NestJS
+```
+$ npm i -g @nestjs/cli
+```
+* MongoDB
+* Postman (o algun software para probar los endpoints)
+* Visual Studio Code (u otro editor de codigo)
+
+### Instalación 🔧
+
+_Clonar el repositorio_
+
+```
+$ git clone https://github.com/Hoffy0/RegistrAPP-DUOC-API.git
 ```
 
-## Running the app
+_Moverse al directorio del proyecto_
 
-```bash
-# development
+```
+$ cd ./RegistrAPP-DUOC-API/
+```
+
+_Instalar dependencias del proyecto_
+
+```
+$ npm ci
+```
+
+_Crear el archivo .env en la raiz del proyecto y editarlo_
+
+PowerShell ( Windows )
+```
+$ ni .env && code .env
+```
+
+Linux / MacOS
+```
+$ touch .env && code .env
+```
+```
+Crear la variable de entorno MONGO_URI y asignar la cadena de conexion a la base de datos (MongoDb) creada
+anteriormente.
+``` 
+
+_Correr el proyecto_
+```
 $ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+## End-Points
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+### SSO 👤
+_Registrar Usuarios_
+```
+Ruta: http://TU_IP:3000/sso/register
+Metodo: POST
+Data Format: JSON
+{
+    "token":     String,  <--  (Al registrar no ingresar datos en este campo. Se Genera automaticamente)
+    "email":     String, 
+    "rut":       String, 
+    "name":      String, 
+    "lastName":  String, 
+    "sLastName": String, 
+    "password":  String  
+}
+```
+_Autenticar Usuario ( LOGIN )_
+```
+Ruta: http://TU_IP:3000/sso/login
+Metodo: POST
+Data Format: JSON
+{
+    "email":     "",  <-- String
+    "password":  ""   <-- String
+}
 ```
 
-## Support
+_Obtener datos del usuario autenticado por su token._
+```
+Ruta: http://TU_IP:3000/sso/data/(TOKEN)
+Metodo: GET
+Parametro: Token
+Data Format: JSON
+{
+    "message": "User data",
+    "user": {
+        "_id":       String,
+        "token":     String,
+        "email":     String,
+        "rut":       String,
+        "name":      String,
+        "lastName":  String,
+        "sLastName": String,
+        "password":  String,
+        "__v": 0
+    }
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Asistencia 📖
+_Agregar Asistencia_
+```
+Ruta: http://TU_IP:3000/attendace/add
+Metodo: POST
+Data Format: JSON
+{
+    "idClass":         Number,
+    "teacher":         String,
+    "classCode":       String,
+    "section":         String,
+    "studentFullName": String,
+    "studentRut":      String,
+    "startTime":       Date,
+    "endTime":         Date 
+}
+```
 
-## Stay in touch
+_Obtener todas las asistencias_
+```
+Ruta: http://TU_IP:3000/attendace/
+Metodo: GET
+Data Format: JSON (Output)
+{
+    "message": "List of Assistance",
+    "attendances": [
+      {
+            "_id":             String,
+            "idClass":         Number,
+            "teacher":         String,
+            "classCode":       String,
+            "section":         String,
+            "studentFullName": String,
+            "studentRut":      String,
+            "startTime":       Date,
+            "endTime":         Date,
+            "__v":             0
+      }
+    ]
+}
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+_Obtener una asistencia por su ID_
+```
+Ruta: http://TU_IP:3000/attendace/(_id)
+Parametro: _id
+Metodo: GET
+Data Format: JSON (Output)
+{
+    "message": "Attendance Found",
+    "attendances": {
+            "_id":             String,
+            "idClass":         Number,
+            "teacher":         String,
+            "classCode":       String,
+            "section":         String,
+            "studentFullName": String,
+            "studentRut":      String,
+            "startTime":       Date,
+            "endTime":         Date,
+            "__v":             0
+    }
+}
+```
 
-## License
+_Actualizar una asistencia por su ID_
+```
+Ruta: http://TU_IP:3000/attendace/update/(_id)
+Parametro: _id
+Metodo: PUT
+Data Format: JSON (Output)
+{
+    "message": "Update Attendance",
+    "attendances": {
+            "_id":             String,
+            "idClass":         Number,
+            "teacher":         String,
+            "classCode":       String,
+            "section":         String,
+            "studentFullName": String,
+            "studentRut":      String,
+            "startTime":       Date,
+            "endTime":         Date,
+            "__v":             0
+    }
+}
+```
 
-Nest is [MIT licensed](LICENSE).
+_Eliminar una asistencia por su ID_
+```
+Ruta: http://TU_IP:3000/attendace/update/(_id)
+Parametro: _id
+Metodo: Delete
+```
+## Construido con 🛠️
+
+* [NestJS](http://www.nestjs.com/) - El framework usado
+
+## Autores ✒️
+
+* **Maximiliano Farias Cortes** - *Creacion de la API* - [Hoffy0](https://github.com/hoffy0)
+
+## Licencia 📄
+
+Este proyecto está bajo la Licencia (MIT) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
