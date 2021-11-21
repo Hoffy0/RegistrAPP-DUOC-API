@@ -84,6 +84,10 @@ export class AttendanceController {
             if(uid.length > 23 && uid.length <= 24){
                 const attendanceDeleted = await this.attendanceService.deleteAttendance(uid);
                 if(!attendanceDeleted) throw new Error('Not found attendance to delete')
+                return res.status(HttpStatus.OK).json({
+                    message: "Attendance deleted!",
+                    deletAttendance: attendanceDeleted
+                });
             }else{
                 throw new Error('UID is invalid or not found in the DB')
             }
