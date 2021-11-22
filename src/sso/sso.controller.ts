@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Res, Body, Param, HttpStatus} from '@nestjs/common';
+import { throws } from 'assert/strict';
 
 import { CreateUserDTO } from './DTO/user.dto';
 import { SsoService } from './sso.service';
@@ -29,12 +30,16 @@ export class SsoController {
         let password = userData.password;
         try {
             const login = await this.ssoService.login(email, password);
+            if(!login) throw new Error("Incorrect username or password.").message;
             return res.status(HttpStatus.OK).json({
                 message: "User Logged",
                 token: login[0].token
             });
         } catch (err) {
-            
+            return res.status(HttpStatus.BAD_REQUEST).json({
+                message: err,
+                status: HttpStatus.BAD_REQUEST
+            })
         }
     }
 
