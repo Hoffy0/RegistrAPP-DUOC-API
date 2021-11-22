@@ -30,12 +30,13 @@ export class SsoController {
         let password = userData.password;
         try {
             const login = await this.ssoService.login(email, password);
-            if(!login) throw new Error("Incorrect username or password.").message;
+            if(login.length == 0) throw new Error("Incorrect username or password.").message;
             return res.status(HttpStatus.OK).json({
                 message: "User Logged",
                 token: login[0].token
             });
         } catch (err) {
+            console.error(err);
             return res.status(HttpStatus.BAD_REQUEST).json({
                 message: err,
                 status: HttpStatus.BAD_REQUEST
